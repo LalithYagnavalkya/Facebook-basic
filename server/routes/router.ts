@@ -1,8 +1,8 @@
 import { Router, Request, Response } from "express";
-import authRoutes from './auth'
+import userRoutes from './user'
 const router = Router();
 
-// Google auth routes 
-router.use("/", authRoutes);
+
+router.use("/user", userRoutes);
 
 export default router;
