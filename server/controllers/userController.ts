@@ -39,7 +39,7 @@ export const login = async (req: Request<{}, {}, userLoginInput['body']>, res: R
         }
         //generate token
         let token = generateToken(user._id)
-        return res.status(200).json({ error: false, message: "Login successful", data: { user, token } })
+        return res.status(200).json({ error: false, message: "Login successful", data: { user }, token: token })
 
     } catch (error: any) {
         return res.status(500).json({ error: true, message: error.message })
@@ -47,19 +47,17 @@ export const login = async (req: Request<{}, {}, userLoginInput['body']>, res: R
 }
 
 export const addExcelSheet = async (req: Request, res: Response) => {
-    console.log(req.body)
-    console.log(req?.file?.filename)
     let emails: any = [];
     try {
         fs.createReadStream(String(req?.file?.path))
             .pipe(csv({}))
             .on('data', (data: any) => emails.push(data))
             .on('end', () => {
-                findEMailsInDb(emails, req)
+                findEmailsInDb(emails, req, res)
             })
 
     } catch (error: any) {
-        console.log(error.message)
+        return res.status(500).json({ error: true, message: "Something went wrong in findEMailsInDb" })
     }
     //exelsheet should 
     //take all the user emails and search in db
@@ -70,17 +68,18 @@ export const addExcelSheet = async (req: Request, res: Response) => {
 interface emailObj {
     Emails: string;
 }
-const findEMailsInDb = async (emails: [emailObj], req: Request) => {
+const findEmailsInDb = async (emails: [emailObj], req: Request, res: Response) => {
     try {
-        let providedMails = emails.map(x => x.Emails)
+        let providedMails: string[] = emails.map(x => x.Emails)
+        const currentUser = await User.findById(req.body.userId).populate('friends', 'email').lean();
         if (!req.body.userId) {
             console.log('userId missing')
         }
-        const currentUser = await User.findById(req.body.userId).populate('friends', 'email');
-        console.log(currentUser)
-
+        providedMails = providedMails.filter((x: string) => x !== currentUser?.email)
+        let listOfUsers = await User.find({ email: { $in: providedMails } }).lean();
+        return res.status(200).json({ error: false, data: listOfUsers })
     } catch (error) {
-
+        return res.status(500).json({ error: true, message: "Something went wrong in findEMailsInDb" })
     }
 
 
@@ -89,13 +88,40 @@ const findEMailsInDb = async (emails: [emailObj], req: Request) => {
 export const addFriend = async (req: Request, res: Response) => {
     try {
         const friendId = req.body.userId;
-        await User.findByIdAndUpdate(req.body.loggedInUserId, { $push: { friends: friendId } }, { new: true })
-    } catch (error) {
+        //update loggedInuserId friends list
+        const isFriends = await User.findOne({ _id: req.body.loggedInUserId, friends: { $in: friendId } }).lean();
+        if (isFriends) {
+            return res.status(400).json({ error: true, message: "you are already friends with this person" })
+        }
+        const user = await User.findByIdAndUpdate(req.body.loggedInUserId, { $push: { friends: friendId } }, { new: true }).lean()
+        if (!user) {
+            return res.status(500).json({ error: true, message: "Something went wrong in adding friend" })
+        }
+        return res.status(200).json({ error: true, message: 'added friend successfully', user })
 
+    } catch (error: any) {
+        return res.status(500).json({ error: true, message: "Something went wrong in adding friend" })
     }
 }
 
-export const removeFriend = (req: Request<{}, {}, CreateUserInput['body']>, res: Response) => { }
+export const removeFriend = async (req: Request, res: Response) => {
+    try {
+        const friendId = req.body.userId;
+        //update loggedInuserId friends list
+        const isFriends = await User.findOne({ _id: req.body.loggedInUserId, friends: { $in: friendId } }).lean();
+        if (!isFriends) {
+            return res.status(400).json({ error: true, message: "He is not your friend to remove" })
+        }
+        const user = await User.findByIdAndUpdate(req.body.loggedInUserId, { $pull: { friends: friendId } }, { new: true }).lean()
+        if (!user) {
+            return res.status(500).json({ error: true, message: "Something went wrong in adding friend" })
+        }
+        return res.status(200).json({ error: true, message: 'removed friend successfully', user })
+    } catch (error: any) {
+        return res.status(500).json({ error: true, message: "Something went wrong in adding friend" })
+    }
+
+}
 
 
 
