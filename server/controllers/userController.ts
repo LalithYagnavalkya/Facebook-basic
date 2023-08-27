@@ -46,17 +46,18 @@ export const login = async (req: Request<{}, {}, userLoginInput['body']>, res: R
     }
 }
 
-export const addExcelSheet = async (req: Request<{}, {}, CreateUserInput['body']>, res: Response) => {
+export const addExcelSheet = async (req: Request, res: Response) => {
     console.log(req.body)
-    console.log(req.file?.filename)
-    const results: any = [];
+    console.log(req?.file?.filename)
+    let emails: any = [];
     try {
-        fs.createReadStream(String(req.file?.path))
+        fs.createReadStream(String(req?.file?.path))
             .pipe(csv({}))
-            .on('data', (data: any) => results.push(data))
+            .on('data', (data: any) => emails.push(data))
             .on('end', () => {
-                console.log(results)
+                findEMailsInDb(emails, req)
             })
+
     } catch (error: any) {
         console.log(error.message)
     }
@@ -66,8 +67,33 @@ export const addExcelSheet = async (req: Request<{}, {}, CreateUserInput['body']
     // is friend true feild in each obj.
     //return all the users which are fetched
 }
+interface emailObj {
+    Emails: string;
+}
+const findEMailsInDb = async (emails: [emailObj], req: Request) => {
+    try {
+        let providedMails = emails.map(x => x.Emails)
+        if (!req.body.userId) {
+            console.log('userId missing')
+        }
+        const currentUser = await User.findById(req.body.userId).populate('friends', 'email');
+        console.log(currentUser)
 
-export const addFriend = (req: Request<{}, {}, CreateUserInput['body']>, res: Response) => { }
+    } catch (error) {
+
+    }
+
+
+}
+
+export const addFriend = async (req: Request, res: Response) => {
+    try {
+        const friendId = req.body.userId;
+        await User.findByIdAndUpdate(req.body.loggedInUserId, { $push: { friends: friendId } }, { new: true })
+    } catch (error) {
+
+    }
+}
 
 export const removeFriend = (req: Request<{}, {}, CreateUserInput['body']>, res: Response) => { }
 

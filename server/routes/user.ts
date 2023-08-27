@@ -10,6 +10,8 @@ const router = Router();
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
+        console.log('inside storage')
+        console.log(req.body)
         return cb(null, './uploads')
     },
     filename: function (req, file, cb) {
@@ -24,6 +26,6 @@ router.post('/register', validateResource(createUserSchema), register)
 
 router.post('/login', validateResource(userLoginSchema), login)
 
-router.post('/uploadExcelSheet', upload.single('csvdata'), addExcelSheet)
+router.post('/uploadExcelSheet', authenticateUser, upload.single('csvdata'), addExcelSheet)
 
 export default router;

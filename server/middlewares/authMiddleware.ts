@@ -13,12 +13,16 @@ export const generateToken = (userId: string) => {
     const token = jwt.sign({ userId }, secretKey, { expiresIn: '1h' });
     return token;
 };
-
-export const verifyToken = (token: string): JwtPayload | null => {
+interface tokenObj {
+    userId: string;
+    exp: number;
+    iat: number;
+}
+export const verifyToken = (token: string): null | tokenObj => {
     try {
         const secretKey: string = <string>process.env.SECRET_KEY
-        const decoded = jwt.verify(token, secretKey);
-        return decoded as JwtPayload;
+        let decoded = jwt.verify(token, secretKey) as tokenObj;
+        return decoded;
     } catch (error) {
         return null;
     }
@@ -39,15 +43,14 @@ export const authenticateUser = async (req: Request, res: Response, next: NextFu
     }
 
     try {
-        const user = await User.findById(decoded?.userId).populate('user_role').lean();
+        const user = await User.findById(decoded?.userId);
 
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
-
-
         req.body.user = user;
         req.body.loggedInUserId = user._id;
+        console.log(req.body)
         next();
     } catch (error) {
         res.status(500).json({ error: 'An error occurred while authenticating the user' });
