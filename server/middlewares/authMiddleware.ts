@@ -24,7 +24,7 @@ export const verifyToken = (token: string): JwtPayload | null => {
     }
 };
 
-const authenticateUser = async (req: Request, res: Response, next: NextFunction) => {
+export const authenticateUser = async (req: Request, res: Response, next: NextFunction) => {
     let token = req.headers.authorization;
     if (!token) {
         return res.status(401).json({ error: 'No token provided' });

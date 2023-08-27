@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
 import bcrypt from 'bcrypt'
+import csv from 'csv-parser'
+import fs from 'fs'
 
 import { CreateUserInput, userLoginInput } from '../schemas/userSchema'
+import { generateToken } from "../middlewares/authMiddleware";
+
 import User from '../models/userModel'
 
 export const register = async (req: Request<{}, {}, CreateUserInput['body']>, res: Response) => {
@@ -34,7 +38,8 @@ export const login = async (req: Request<{}, {}, userLoginInput['body']>, res: R
             return res.status(400).json({ error: true, message: "Wrong password" })
         }
         //generate token
-        return res.status(200).json({ error: false, message: "Login successful", data: user })
+        let token = generateToken(user._id)
+        return res.status(200).json({ error: false, message: "Login successful", data: { user, token } })
 
     } catch (error: any) {
         return res.status(500).json({ error: true, message: error.message })
@@ -42,6 +47,19 @@ export const login = async (req: Request<{}, {}, userLoginInput['body']>, res: R
 }
 
 export const addExcelSheet = async (req: Request<{}, {}, CreateUserInput['body']>, res: Response) => {
+    console.log(req.body)
+    console.log(req.file?.filename)
+    const results: any = [];
+    try {
+        fs.createReadStream(String(req.file?.path))
+            .pipe(csv({}))
+            .on('data', (data: any) => results.push(data))
+            .on('end', () => {
+                console.log(results)
+            })
+    } catch (error: any) {
+        console.log(error.message)
+    }
     //exelsheet should 
     //take all the user emails and search in db
     //before returning all the users for this particular loggedInUser check who are friends and if they are friends send
