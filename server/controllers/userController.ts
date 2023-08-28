@@ -46,7 +46,7 @@ export const login = async (req: Request<{}, {}, userLoginInput['body']>, res: R
     }
 }
 
-export const addExcelSheet = async (req: Request, res: Response) => {
+export const addExcelSheet = async (req: any, res: Response) => {
     let emails: any = [];
     try {
         fs.createReadStream(String(req?.file?.path))
@@ -59,11 +59,6 @@ export const addExcelSheet = async (req: Request, res: Response) => {
     } catch (error: any) {
         return res.status(500).json({ error: true, message: "Something went wrong in findEMailsInDb" })
     }
-    //exelsheet should 
-    //take all the user emails and search in db
-    //before returning all the users for this particular loggedInUser check who are friends and if they are friends send
-    // is friend true feild in each obj.
-    //return all the users which are fetched
 }
 interface emailObj {
     Emails: string;
