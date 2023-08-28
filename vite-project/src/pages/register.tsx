@@ -24,25 +24,25 @@ const Login: React.FC = () => {
   }, [isLoggedIn, navigate]);
 
   const handleLogin = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    if (!email) return toast.error("Enter valid email");
-    const timer = setTimeout(() => {
-      toast.info("Server may take 30 seconds to respond");
-    }, 3000);
-    setLoading(true);
-    api
-      .post("/api/auth/request-otp", { email })
-      .then((response) => {
-        toast.success(response.data.message);
-        setShowOTP(true);
-      })
-      .catch((err) => {
-        toast.error(err.response.data.error);
-      })
-      .finally(() => {
-        setLoading(false);
-        clearTimeout(timer);
-      });
+    // event.preventDefault();
+    // if (!email) return toast.error("Enter valid email");
+    // const timer = setTimeout(() => {
+    //   toast.info("Server may take 30 seconds to respond");
+    // }, 3000);
+    // setLoading(true);
+    // api
+    //   .post("/api/auth/request-otp", { email })
+    //   .then((response) => {
+    //     toast.success(response.data.message);
+    //     setShowOTP(true);
+    //   })
+    //   .catch((err) => {
+    //     toast.error(err.response.data.error);
+    //   })
+    //   .finally(() => {
+    //     setLoading(false);
+    //     clearTimeout(timer);
+    //   });
   };
 
   const handleOTPSubmit = async (
@@ -103,6 +103,14 @@ const Login: React.FC = () => {
           disabled={showOTP}
           required
         />
+        <Input
+          type="password"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Confirm password"
+          disabled={showOTP}
+          required
+        />
         {showOTP ? (
           <>
             <Input
@@ -122,7 +130,7 @@ const Login: React.FC = () => {
           </>
         ) : (
           <Button onClick={handleLogin} disabled={loading} $loading={loading}>
-            {loading ? <Loading /> : "Login"}
+            {loading ? <Loading /> : "Register"}
           </Button>
         )}
       </LoginForm>
@@ -134,10 +142,10 @@ const LoginContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   /* height: 100vh; */
   border: solid 2px gray;
-  padding: 6rem 2rem;
+  padding: 3rem 2rem 8rem 2rem;
 `;
 
 const Header = styled.h1`
@@ -172,18 +180,20 @@ const Button = styled.button<{ $loading: boolean }>`
   position: relative;
   transition: 0.5s ease-in-out;
   padding: 10px;
-  background-color: #007bff;
-  color: #ffffff;
+  background-color: #f5f5f5;
+  color: #000000;
   border: none;
   border-radius: 5px;
   cursor: ${({ $loading }) => ($loading ? "not-allowed" : "pointer")};
   font-size: 16px;
   font-weight: bold;
   &:disabled {
-    background-color: #71a8e2;
+    background-color: #777a7c;
   }
   &:hover:not([disabled]) {
-    background-color: #0056b3;
+    background-color: #000000;
+    color: white;
+    border: solid 2px white;
   }
 `;
 
