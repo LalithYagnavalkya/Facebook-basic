@@ -12,7 +12,6 @@ const Register: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showOTP, setShowOTP] = useState(false);
   const [loading, setLoading] = useState(false);
   const { isLoggedIn } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
