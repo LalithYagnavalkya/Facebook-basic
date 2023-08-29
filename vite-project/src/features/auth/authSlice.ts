@@ -6,8 +6,9 @@ const initialState: RootState["auth"] = {
         JSON.parse(localStorage.getItem("userData") ?? "{}").isLoggedIn || false,
     id: JSON.parse(localStorage.getItem("userData") ?? "{}").id || null,
     email: JSON.parse(localStorage.getItem("userData") ?? "{}").email || null,
-    accessToken:
+    token:
         JSON.parse(localStorage.getItem("userData") ?? "{}").token || null,
+    friends: JSON.parse(localStorage.getItem('userData') ?? "{}").token || null
 };
 
 const authSlice = createSlice({
@@ -15,17 +16,20 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         loginSuccess: (state, action) => {
+            let userObj = action.payload.userObj;
+            let token = action.payload.token;
             state.isLoggedIn = true;
             localStorage.setItem(
                 "userData",
-                JSON.stringify({ ...action.payload, isLoggedIn: true })
+                JSON.stringify({ ...userObj, token, isLoggedIn: true })
             );
-            state.id = action.payload.id;
-            state.email = action.payload.email;
-            state.accessToken = action.payload.token;
+            state.id = userObj._id;
+            state.email = userObj.email;
+            state.token = token;
+            state.friends = userObj.friends;
         },
         setAccessToken: (state, action) => {
-            state.accessToken = action.payload.accessToken;
+            state.token = action.payload.accessToken;
             localStorage.setItem(
                 "userData",
                 JSON.stringify({
@@ -38,7 +42,7 @@ const authSlice = createSlice({
             localStorage.removeItem("userData");
             state.isLoggedIn = false;
             state.email = null;
-            state.accessToken = null;
+            state.token = null;
             state.id = null;
         },
     },

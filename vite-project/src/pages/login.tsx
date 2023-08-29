@@ -35,7 +35,12 @@ const Login: React.FC = () => {
       .post("/user/login", { email, password })
       .then((response) => {
         toast.success(response.data.message);
-        dispatch(loginSuccess({ token, email, id }));
+        if(response.data.error === false){
+          let userObj = response.data.data.user;
+          let token = response.data.token;
+          dispatch(loginSuccess({ userObj, token }));
+        }
+        console.log(response.data)
       })
       .catch((err) => {
         if (Array.isArray(err.response.data) && err.response.data.length > 0) {

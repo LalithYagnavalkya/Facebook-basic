@@ -3,7 +3,8 @@ export interface RootState {
         isLoggedIn: boolean;
         email: string | null;
         id: string | null;
-        accessToken: string | null;
+        token: string | null;
+        friends: string[] | null;
     };
 }
 export interface Booking {

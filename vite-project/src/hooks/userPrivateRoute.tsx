@@ -6,7 +6,7 @@ import { apiPrivate } from "../services/api";
 
 const useAxiosPrivate = () => {
   const refresh = useRefreshToken();
-  const { accessToken } = useSelector((state: RootState) => state.auth);
+  const { token: accessToken } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     const requestIntercept = apiPrivate.interceptors.request.use(
