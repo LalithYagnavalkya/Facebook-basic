@@ -4,12 +4,13 @@ import { api } from "../services/api";
 import { toast } from "react-toastify";
 import Loading from "../components/loading";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../types";
+import { RootState } from "../services/types";
 import { useNavigate } from "react-router-dom";
 import { loginSuccess } from "../features/auth/authSlice";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
+   const [password, setPassword] = useState("");
   const [showOTP, setShowOTP] = useState(false);
   const [otp, setOTP] = useState("");
   const [loading, setLoading] = useState(false);
@@ -31,10 +32,9 @@ const Login: React.FC = () => {
     }, 3000);
     setLoading(true);
     api
-      .post("/api/auth/request-otp", { email })
+      .post("/user/login", { email, password })
       .then((response) => {
         toast.success(response.data.message);
-        setShowOTP(true);
       })
       .catch((err) => {
         toast.error(err.response.data.error);
@@ -92,40 +92,23 @@ const Login: React.FC = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email"
-          disabled={showOTP}
           required
         />
         <Input
           type="password"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
-          disabled={showOTP}
           required
         />
-        {showOTP ? (
-          <>
-            <Input
-              type="number"
-              value={otp}
-              onChange={(e) => setOTP(e.target.value)}
-              placeholder="Enter OTP"
-              maxLength={6}
-              required
-            />
-            <Button
-              onClick={handleOTPSubmit}
-              disabled={loading}
-              $loading={loading}>
-              {loading ? <Loading /> : "Login"}
-            </Button>
-          </>
-        ) : (
-          <Button onClick={handleLogin} disabled={loading} $loading={loading}>
-            {loading ? <Loading /> : "Login"}
-          </Button>
-        )}
+
+        <Button onClick={handleLogin} disabled={loading} $loading={loading}>
+          {loading ? <Loading /> : "Login"}
+        </Button>
       </LoginForm>
+      <Already onClick={() => navigate("/register")}>
+        not a meamber? then Reigster
+      </Already>
     </LoginContainer>
   );
 };
@@ -149,7 +132,12 @@ const LoginForm = styled.form`
   flex-direction: column;
   gap: 20px;
 `;
-
+const Already = styled.div`
+  padding-top: 2rem;
+  cursor: pointer;
+  font-size: 16px;
+  color: #245eca;
+`;
 const Input = styled.input`
   padding: 10px;
   border: 1px solid #d9d9d9;
@@ -183,7 +171,8 @@ const Button = styled.button<{ $loading: boolean }>`
     background-color: #71a8e2;
   }
   &:hover:not([disabled]) {
-    background-color: #0056b3;
+    background-color: #020202;
+    border: 2px solid white;
   }
 `;
 
