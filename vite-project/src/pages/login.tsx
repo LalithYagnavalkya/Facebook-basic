@@ -10,7 +10,7 @@ import { loginSuccess } from "../features/auth/authSlice";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
-   const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("");
   const [showOTP, setShowOTP] = useState(false);
   const [otp, setOTP] = useState("");
   const [loading, setLoading] = useState(false);
@@ -35,47 +35,18 @@ const Login: React.FC = () => {
       .post("/user/login", { email, password })
       .then((response) => {
         toast.success(response.data.message);
-      })
-      .catch((err) => {
-        toast.error(err.response.data.error);
-      })
-      .finally(() => {
-        setLoading(false);
-        clearTimeout(timer);
-      });
-  };
-
-  const handleOTPSubmit = async (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault();
-    if (!otp) {
-      return toast.error("Enter OTP");
-    }
-    if (otp.length < 6 || otp.length > 6) {
-      return toast.error("Invalid OTP");
-    }
-    setLoading(true);
-    const timer = setTimeout(() => {
-      toast.info("Server may take 30 seconds to respond");
-    }, 3000);
-
-    api
-      .post(
-        "/api/auth/verify-otp",
-        { email, otp },
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      )
-      .then((response) => {
-        const { id, token, email } = response.data;
         dispatch(loginSuccess({ token, email, id }));
-        navigate("/calendar");
       })
       .catch((err) => {
-        toast.error(err.response.data.error);
+        if (Array.isArray(err.response.data) && err.response.data.length > 0) {
+          err.response.data.map((e: any) => {
+            toast.error(e.message);
+          });
+          console.log(err.response.data[0]?.messge);
+        } else {
+          console.log(err);
+          toast.error(err.response.data.message);
+        }
       })
       .finally(() => {
         setLoading(false);
