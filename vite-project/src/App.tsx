@@ -8,6 +8,7 @@ import { Provider } from 'react-redux'
 import Store from './store'
 import { ToastContainer } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css";
+import { PrivateRoutes } from './services/privateRoutes'
 function App() {
 
   return (
@@ -16,9 +17,8 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/" element={<Home />}>
-            {/* <Route path="appointments" element={<Appointments />} /> */}
-            {/* <Route path="calendar" element={<Calendar />} /> */}
+          <Route path="/" element={<PrivateRoutes />}>
+            <Route path="/home" element={<Home />} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -30,21 +30,12 @@ const Home = () => {
     }
   };
 
-  if (!isLoggedIn) return <></>;
+  // if (!isLoggedIn) return <></>;
   return (
     <HomeContainer>
-      <NavBar>
-        <NavLink to="/calendar" $selected={location.pathname === "/calendar"}>
-          Calendar
-        </NavLink>
-        <NavLink
-          to="/appointments"
-          $selected={location.pathname === "/appointments"}>
-          Bookings
-        </NavLink>
-        <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
-      </NavBar>
-      <Outlet />
+      <SearchSection >
+        
+      </SearchSection>
     </HomeContainer>
   );
 };
@@ -56,16 +47,17 @@ const HomeContainer = styled.div`
   height: 100vh;
 `;
 
-const NavBar = styled.nav`
+const SearchSection = styled.nav`
   display: flex;
-  width: 100%;
+  width: 40vw;
+  background-color: white;
   position: relative;
   justify-content: center;
   gap: 20px;
   margin: 20px 0;
 `;
 
-const NavLink = styled(Link)<{ $selected?: boolean }>`
+const NavLink = styled(Link) <{ $selected?: boolean }>`
   color: ${({ $selected }) => ($selected ? "#ffffff" : "#000000")};
   background-color: ${({ $selected }) => ($selected ? "#007bff" : "#f0f0f0")};
   padding: 8px 16px;

@@ -20,7 +20,7 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate("/calendar");
+      navigate("/home");
     }
   }, [isLoggedIn, navigate]);
 

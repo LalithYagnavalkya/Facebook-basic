@@ -12,3 +12,6 @@ export interface Booking {
     date: string;
     timeSlot: string;
 }
+export interface PrivateRoutesProps {
+    // children: React.ReactNode;
+}
