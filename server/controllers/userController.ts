@@ -103,6 +103,7 @@ export const removeFriend = async (req: Request, res: Response) => {
     try {
         const friendId = req.body.userId;
         //update loggedInuserId friends list
+        //remove friends both ways
         const isFriends = await User.findOne({ _id: req.body.loggedInUserId, friends: { $in: friendId } }).lean();
         if (!isFriends) {
             return res.status(400).json({ error: true, message: "He is not your friend to remove" })
@@ -114,6 +115,21 @@ export const removeFriend = async (req: Request, res: Response) => {
         return res.status(200).json({ error: true, message: 'removed friend successfully', user })
     } catch (error: any) {
         return res.status(500).json({ error: true, message: "Something went wrong in adding friend" })
+    }
+
+}
+
+export const getUserFriends = async (req: Request, res: Response) => {
+    try {
+        const loggedInUserId = req.body.loggedInUserId;
+        const user = await User.findOne({ _id: loggedInUserId }).populate('friends').select('friends').lean();
+        if(user){
+            return res.status(200).json({ error: true, message: 'removed friend successfully', user })
+        }else{
+            return res.status(500).json({ error: true, message: "Something went getUserFriends" })
+        }
+    } catch (error: any) {
+        return res.status(500).json({ error: true, message: "Something went getUserFriends" })
     }
 
 }

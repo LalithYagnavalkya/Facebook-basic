@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import multer from 'multer'
 
-import { login, register, addExcelSheet, addFriend, removeFriend } from '../controllers/userController'
+import { login, register, addExcelSheet, addFriend, removeFriend, getUserFriends } from '../controllers/userController'
 import validateResource from "../middlewares/validateResource";
 import { authenticateUser } from '../middlewares/authMiddleware'
 import { createUserSchema, userLoginSchema } from "../schemas/userSchema";
@@ -31,6 +31,8 @@ router.post('/uploadExcelSheet', authenticateUser, upload.single('csvdata'), add
 router.post('/addFriend', authenticateUser, addFriend)
 
 router.post('/removeFriend', authenticateUser, removeFriend)
+
+router.get('/getUserFriends', authenticateUser, getUserFriends)
 
 
 
