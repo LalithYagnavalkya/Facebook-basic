@@ -39,6 +39,7 @@ const authSlice = createSlice({
             );
         },
         logout: (state) => {
+            console.log('sorry')
             localStorage.removeItem("userData");
             state.isLoggedIn = false;
             state.email = null;

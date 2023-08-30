@@ -1,11 +1,9 @@
 import { useEffect } from "react";
-import useRefreshToken from "./useRefreshToken";
 import { useSelector } from "react-redux";
 import { RootState } from "../services/types";
 import { apiPrivate } from "../services/api";
 
 const useAxiosPrivate = () => {
-  const refresh = useRefreshToken();
   const { token: accessToken } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
@@ -23,12 +21,12 @@ const useAxiosPrivate = () => {
       },
       async (error) => {
         const prevRequest = error?.config;
-        if (error?.response?.status === 403 && !prevRequest?.sent) {
-          prevRequest.sent = true;
-          const newAccessToken = await refresh();
-          prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
-          return apiPrivate(prevRequest);
-        }
+        // if (error?.response?.status === 403 && !prevRequest?.sent) {
+        //   prevRequest.sent = true;
+        //   const newAccessToken = await refresh();
+        //   prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+        //   return apiPrivate(prevRequest);
+        // }
         return Promise.reject(error);
       }
     );
@@ -37,7 +35,7 @@ const useAxiosPrivate = () => {
       apiPrivate.interceptors.request.eject(requestIntercept);
       apiPrivate.interceptors.response.eject(responseIntercept);
     };
-  }, [accessToken, refresh]);
+  }, [accessToken]);
 
   return apiPrivate;
 };

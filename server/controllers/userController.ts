@@ -82,7 +82,7 @@ const findEmailsInDb = async (emails: [emailObj], req: Request, res: Response) =
 
 export const addFriend = async (req: Request, res: Response) => {
     try {
-        const friendId = req.body.userId;
+        const friendId = req.body._id;
         //update loggedInuserId friends list
         const isFriends = await User.findOne({ _id: req.body.loggedInUserId, friends: { $in: friendId } }).lean();
         if (isFriends) {
@@ -119,13 +119,31 @@ export const removeFriend = async (req: Request, res: Response) => {
 
 }
 
+export const searchFriends = async (req: Request, res: Response) => {
+    try {
+        const email = req.body.fsearch;
+        if (!email) {
+            return res.status(500).json({ error: true, user: [] })
+        }
+        let users = await User.find({ email: { $regex: new RegExp(email, "i") } }).lean();
+        users = users.filter(user => String(user._id) !== String(req.body.loggedInUserId))
+        if (users) {
+            return res.status(200).json({ error: false, user: users })
+        } else {
+            return res.status(500).json({ error: true, user: [] })
+        }
+    } catch (error: any) {
+        return res.status(500).json({ error: true, message: "Something went getUserFriends" })
+    }
+
+}
 export const getUserFriends = async (req: Request, res: Response) => {
     try {
         const loggedInUserId = req.body.loggedInUserId;
         const user = await User.findOne({ _id: loggedInUserId }).populate('friends').select('friends').lean();
-        if(user){
-            return res.status(200).json({ error: true, message: 'removed friend successfully', user })
-        }else{
+        if (user) {
+            return res.status(200).json({ error: false, message: 'removed friend successfully', user })
+        } else {
             return res.status(500).json({ error: true, message: "Something went getUserFriends" })
         }
     } catch (error: any) {
