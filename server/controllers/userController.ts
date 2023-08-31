@@ -136,14 +136,14 @@ export const searchFriends = async (req: Request, res: Response) => {
     try {
         const email = req.body.fsearch;
         if (!email) {
-            return res.status(500).json({ error: true, user: [] })
+            return res.status(200).json({ error: true, user: [] })
         }
         let users = await User.find({ email: { $regex: new RegExp(email, "i") } }).lean();
         users = users.filter(user => String(user._id) !== String(req.body.loggedInUserId))
         if (users) {
             return res.status(200).json({ error: false, user: users })
         } else {
-            return res.status(500).json({ error: true, user: [] })
+            return res.status(200).json({ error: true, user: [] })
         }
     } catch (error: any) {
         return res.status(500).json({ error: true, message: "Something went getUserFriends" })
