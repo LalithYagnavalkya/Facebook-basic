@@ -4,7 +4,7 @@ import { RootState } from "../../services/types";
 const initialState: RootState["auth"] = {
     isLoggedIn:
         JSON.parse(localStorage.getItem("userData") ?? "{}").isLoggedIn || false,
-    id: JSON.parse(localStorage.getItem("userData") ?? "{}").id || null,
+    id: JSON.parse(localStorage.getItem("userData") ?? "{}")._id || null,
     email: JSON.parse(localStorage.getItem("userData") ?? "{}").email || null,
     token:
         JSON.parse(localStorage.getItem("userData") ?? "{}").token || null,

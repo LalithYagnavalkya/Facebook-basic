@@ -49,12 +49,18 @@ export const login = async (req: Request<{}, {}, userLoginInput['body']>, res: R
 export const addExcelSheet = async (req: any, res: Response) => {
     let emails: any = [];
     try {
-        fs.createReadStream(String(req?.file?.path))
-            .pipe(csv({}))
-            .on('data', (data: any) => emails.push(data))
-            .on('end', () => {
-                findEmailsInDb(emails, req, res)
-            })
+        if (String(req?.file?.path)) {
+
+            fs.createReadStream(String(req?.file?.path))
+                .pipe(csv({}))
+                .on('data', (data: any) => emails.push(data))
+                .on('end', async () => {
+                    await findEmailsInDb(emails, req, res)
+
+                })
+        }else{
+            return res.status(500).json({ error: true, message: "Something went wrong in findEMailsInDb" })
+        }
 
     } catch (error: any) {
         return res.status(500).json({ error: true, message: "Something went wrong in findEMailsInDb" })
@@ -72,6 +78,13 @@ const findEmailsInDb = async (emails: [emailObj], req: Request, res: Response) =
         }
         providedMails = providedMails.filter((x: string) => x !== currentUser?.email)
         let listOfUsers = await User.find({ email: { $in: providedMails } }).lean();
+        await fs.unlink(String(req?.file?.path), (err) => {
+            if (err) {
+                console.log(err)
+            } else {
+                console.log('success')
+            }
+        })
         return res.status(200).json({ error: false, data: listOfUsers })
     } catch (error) {
         return res.status(500).json({ error: true, message: "Something went wrong in findEMailsInDb" })

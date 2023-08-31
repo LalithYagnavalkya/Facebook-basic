@@ -3,7 +3,7 @@ import './App.css'
 import Login from './pages/login'
 import Home from './pages/home'
 import Register from './pages/register'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import Store from './store'
 import { ToastContainer } from 'react-toastify'
@@ -20,6 +20,7 @@ function App() {
           <Route path="/" element={<PrivateRoutes />}>
             <Route path="/home" element={<Home />} />
           </Route>
+          <Route path="*" element={<Navigate to='/home' />} />
         </Routes>
       </BrowserRouter>
       <ToastContainer />
