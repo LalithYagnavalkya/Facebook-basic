@@ -31,7 +31,7 @@ const Home = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .post("http://localhost:4000/api/v1/user/searchFriends", { fsearch },{
+      .post("https://one-shot.onrender.com/api/v1/user/searchFriends", { fsearch },{
         headers: {
           Authorization: `Bearer ${token}`,
           // You can add other headers here if needed
@@ -56,7 +56,7 @@ const Home = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("http://localhost:4000/api/v1/user/getUserFriends", {
+      .get("https://one-shot.onrender.com/api/v1/user/getUserFriends", {
         headers: {
           Authorization: `Bearer ${token}`,
         }
@@ -84,7 +84,7 @@ const Home = () => {
   const send_id = async (_id:any) => {
     setLoading(true);
     axios
-      .post("http://localhost:4000/api/v1/user/addFriend", { _id }, {
+      .post("https://one-shot.onrender.com/api/v1/user/addFriend", { _id }, {
         headers: {
           Authorization: `Bearer ${token}`,
           // You can add other headers here if needed
@@ -93,7 +93,7 @@ const Home = () => {
       .then(() => {
         setLoading(true);
         axios
-          .get("http://localhost:4000/api/v1/user/getUserFriends", {
+          .get("https://one-shot.onrender.com/api/v1/user/getUserFriends", {
             headers: {
               Authorization: `Bearer ${token}`,
             }
@@ -128,7 +128,7 @@ const Home = () => {
       console.log(pair[0] + ': ' + pair[1]);
     }
     axios
-      .post("http://localhost:4000/api/v1/user/uploadExcelSheet", formData , {
+      .post("https://one-shot.onrender.com/api/v1/user/uploadExcelSheet", formData , {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
@@ -158,7 +158,7 @@ const Home = () => {
   const remove_id = (_id: any) => {
     setLoading(true);
     axios
-      .post("http://localhost:4000/api/v1/user/removeFriend", { userId:_id }, {
+      .post("https://one-shot.onrender.com/api/v1/user/removeFriend", { userId:_id }, {
         headers: {
           Authorization: `Bearer ${token}`,
           // You can add other headers here if needed
@@ -168,7 +168,7 @@ const Home = () => {
 
         setLoading(true);
         axios
-          .get("http://localhost:4000/api/v1/user/getUserFriends", {
+          .get("https://one-shot.onrender.com/api/v1/user/getUserFriends", {
             headers: {
               Authorization: `Bearer ${token}`,
             }
