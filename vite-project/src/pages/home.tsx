@@ -4,7 +4,6 @@ import { RootState } from "../services/types";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { styled } from "styled-components";
 import { logout } from "../features/auth/authSlice";
-import { api, apiPrivate } from "../services/api";
 import Loading from "../components/loading";
 import User from "../components/user";
 import RUser from "../components/userRemove";
@@ -90,7 +89,7 @@ const Home = () => {
           // You can add other headers here if needed
         }
       })
-      .then((data) => {
+      .then(() => {
         setLoading(true);
         axios
           .get("https://one-shot.onrender.com/api/v1/user/getUserFriends", {
@@ -287,22 +286,22 @@ const Input = styled.input`
   }
 `;
 
-const Button = styled.button`
-   color: #ffffff;
-  background-color: #0f30b5;
-  padding: 8px 16px;
-  right: 5%;
-  border: none;
-  border-radius: 5px;
-  height: 40px;
-  cursor: pointer;
-  font-weight: 400;
-  transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
-  &:hover {
-    background-color: #000000;
-    border: 2px solid white;
-  }
-`
+// const Button = styled.button`
+//    color: #ffffff;
+//   background-color: #0f30b5;
+//   padding: 8px 16px;
+//   right: 5%;
+//   border: none;
+//   border-radius: 5px;
+//   height: 40px;
+//   cursor: pointer;
+//   font-weight: 400;
+//   transition: 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+//   &:hover {
+//     background-color: #000000;
+//     border: 2px solid white;
+//   }
+// `
 const Topbar = styled.div`
   display: flex;
   width: 90vw;
@@ -316,18 +315,7 @@ const Header = styled.h1`
   color: #ffffff;
   font-size: 24px;
 `;
-const NavLink = styled(Link) <{ $selected?: boolean }>`
-  color: ${({ $selected }) => ($selected ? "#ffffff" : "#000000")};
-  background-color: ${({ $selected }) => ($selected ? "#007bff" : "#f0f0f0")};
-  padding: 8px 16px;
-  border-radius: 5px;
-  text-decoration: none;
-  font-weight: bold;
 
-  &:hover {
-    background-color: ${({ $selected }) => ($selected ? "#0056b3" : "#d9d9d9")};
-  }
-`;
 
 const LogoutButton = styled.button`
   color: #ffffff;

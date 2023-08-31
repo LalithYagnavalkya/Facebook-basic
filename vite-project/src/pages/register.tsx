@@ -6,7 +6,6 @@ import Loading from "../components/loading";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../services/types";
 import { useNavigate } from "react-router-dom";
-import { loginSuccess } from "../features/auth/authSlice";
 
 const Register: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -15,7 +14,6 @@ const Register: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const { isLoggedIn } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (isLoggedIn) {

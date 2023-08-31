@@ -11,8 +11,6 @@ import { loginSuccess } from "../features/auth/authSlice";
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showOTP, setShowOTP] = useState(false);
-  const [otp, setOTP] = useState("");
   const [loading, setLoading] = useState(false);
   const { isLoggedIn } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
