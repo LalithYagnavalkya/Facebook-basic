@@ -3,7 +3,7 @@ import { styled } from "styled-components";
 import { api } from "../services/api";
 import { toast } from "react-toastify";
 import Loading from "../components/loading";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../services/types";
 import { useNavigate } from "react-router-dom";
 
