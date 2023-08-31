@@ -38,11 +38,9 @@ const Home = () => {
         }
       })
       .then((response) => {
-        if (fsearch !== ''){
+      
           setFriendsFound(response?.data?.user)
-        }else{
-          setFriendsFound([])
-        }
+      
       })
       .catch((err) => {
         console.log(err);
@@ -142,7 +140,6 @@ const Home = () => {
         console.log(response)
       })
       .catch((err) => {
-        setFriendsFound([])
         console.log(err);
       })
       .finally(() => {
