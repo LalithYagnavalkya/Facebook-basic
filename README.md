@@ -1,6 +1,6 @@
-# MENR User Mangagment Project
+# Facebook Basic (a project that implements a file system)
 A node typescript project.
-### This project contains
+### This project contains the following features
 - Register and login functionality
 - bulk upload users using excel sheet.
 - add friend
