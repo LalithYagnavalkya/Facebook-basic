@@ -10,6 +10,6 @@ A node typescript project.
 I have used the following tech
 - Mongoose for database
 - multer to store files in the server.
-- jwt token to for route protection
+- JWT token for route protection
 - used to "Zod" for form and type validation
   
