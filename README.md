@@ -1,4 +1,4 @@
-# Facebook Basic (a project that implements a file system)
+# Facebook Basic (a project that implements node file system)
 A node typescript project.
 ### This project contains the following features
 - Register and login functionality
