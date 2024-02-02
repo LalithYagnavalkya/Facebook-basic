@@ -7,7 +7,7 @@ A node typescript project.
 - remove friend
 - middlewares to authenticate and authroize user.
 
-I have used the following tech
+tech used
 - Mongoose for database
 - multer to store files on the server.
 - JWT token for route protection
