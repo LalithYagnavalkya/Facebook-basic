@@ -11,5 +11,7 @@ tech used
 - Mongoose for database
 - multer to store files on the server.
 - JWT token for route protection
-- used to "Zod" for form and type validation
+- used "Zod" for form and type validation
+- React for frontend
+
   
